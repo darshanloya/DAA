@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure to hold item details
+typedef struct {
+    int value;
+    int weight;
+    float ratio; // Value to weight ratio
+} Item;
+
+// Comparison function to sort items by their value-to-weight ratio
+int compare(const void *a, const void *b) {
+    Item *item1 = (Item *)a;
+    Item *item2 = (Item *)b;
+    return (item2->ratio > item1->ratio) - (item2->ratio < item1->ratio);
+}
+
+// Function to get the maximum total value in the knapsack
+float fractional_knapsack(Item items[], int n, int W) {
+    // Sort items by their value-to-weight ratio
+    for (int i = 0; i < n; i++) {
+        items[i].ratio = (float)items[i].value / items[i].weight;
+    }
+    qsort(items, n, sizeof(Item), compare);
+
+    float total_value = 0.0; // Initialize total value
+
+    for (int i = 0; i < n; i++) {
+        if (W == 0) {
+            break; // If the knapsack is full, break
+        }
+
+        // If the weight of the item can be added to the knapsack
+        if (items[i].weight <= W) {
+            W -= items[i].weight; // Reduce the remaining weight
+            total_value += items[i].value; // Add the full value of the item
+        } else {
+            // Take the fraction of the remaining item
+            total_value += items[i].value * ((float)W / items[i].weight);
+            W = 0; // Knapsack is now full
+        }
+    }
+
+    return total_value; // Return the maximum value
+}
+
+// Main function to test the implementation
+int main() {
+    int n = 3; // Number of items
+    Item items[] = {
+        {60, 10},  // Value: 60, Weight: 10
+        {100, 20}, // Value: 100, Weight: 20
+        {120, 30}  // Value: 120, Weight: 30
+    };
+    int W = 50; // Capacity of the knapsack
+
+    float max_value = fractional_knapsack(items, n, W);
+    printf("Maximum value in the knapsack: %.2f\n", max_value);
+
+    return 0;
+}

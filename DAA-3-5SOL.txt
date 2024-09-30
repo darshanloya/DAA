@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Comparison function for qsort to sort the arrays
+int compare(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
+
+// Function to find the maximum number of content children
+int findContentChildren(int* g, int gSize, int* s, int sSize) {
+    // Sort the greed factors and cookie sizes
+    qsort(g, gSize, sizeof(int), compare);
+    qsort(s, sSize, sizeof(int), compare);
+
+    int child = 0; // Index for children
+    int cookie = 0; // Index for cookies
+
+    // Iterate through both arrays to find content children
+    while (child < gSize && cookie < sSize) {
+        if (s[cookie] >= g[child]) {
+            // If the cookie can satisfy the child's greed
+            child++; // Move to the next child
+        }
+        cookie++; // Move to the next cookie
+    }
+
+    return child; // The number of content children
+}
+
+// Main function to test the implementation
+int main() {
+    int g[] = {1, 2, 3}; // Greed factors of the children
+    int s[] = {1, 1};    // Sizes of the cookies
+    int gSize = sizeof(g) / sizeof(g[0]);
+    int sSize = sizeof(s) / sizeof(s[0]);
+
+    int result = findContentChildren(g, gSize, s, sSize);
+    printf("Number of content children: %d\n", result);
+
+    return 0;
+}

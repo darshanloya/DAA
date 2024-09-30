@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure to represent an interval
+typedef struct {
+    int start;
+    int end;
+} Interval;
+
+// Comparison function for qsort to sort intervals by their start times
+int compare(const void *a, const void *b) {
+    return ((Interval *)a)->start - ((Interval *)b)->start;
+}
+
+// Function to merge overlapping intervals
+Interval* mergeIntervals(Interval* intervals, int intervalsSize, int* returnSize) {
+    if (intervalsSize == 0) {
+        *returnSize = 0;
+        return NULL;
+    }
+
+    // Sort intervals by start times
+    qsort(intervals, intervalsSize, sizeof(Interval), compare);
+
+    // Create an array to hold merged intervals
+    Interval* merged = (Interval*)malloc(intervalsSize * sizeof(Interval));
+    int index = 0;
+
+    // Start with the first interval
+    merged[index] = intervals[0];
+
+    for (int i = 1; i < intervalsSize; i++) {
+        // If the current interval overlaps with the last merged interval
+        if (intervals[i].start <= mer

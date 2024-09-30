@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure to represent an item with its units and number of boxes
+typedef struct {
+    int units;
+    int boxes;
+} Item;
+
+// Comparison function to sort items by their units per box in descending order
+int compare(const void *a, const void *b) {
+    Item *item1 = (Item *)a;
+    Item *item2 = (Item *)b;
+    return item2->units - item1->units; // Sort in descending order
+}
+
+// Function to calculate the maximum units that can be put on the truck
+int maximumUnits(Item* boxTypes, int boxTypesSize, int truckSize) {
+    // Sort the box types by units in descending order
+    qsort(boxTypes, boxTypesSize, sizeof(Item), compare);
+
+    int totalUnits = 0;
+    
+    for (int i = 0; i < boxTypesSize; i++) {
+        if (truckSize == 0) {
+            break; // If the truck is full, break out of the loop
+        }
+
+        // Deter
